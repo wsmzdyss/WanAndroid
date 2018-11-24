@@ -11,6 +11,4 @@ interface LoginView : BaseView {
     fun onLoginResult(t : LoginResp)
 
     fun onRegisterResult(t : LoginResp)
-
-    fun onArticleResult(t : ArticleListResp)
 }

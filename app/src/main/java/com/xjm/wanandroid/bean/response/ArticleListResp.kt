@@ -36,8 +36,7 @@ data class Article(
     val type: Int,
     val userId: Int,
     val visible: Int,
-    val zan: Int,
-    var isChecked: Boolean = false
+    val zan: Int
 )
 
 data class Tag(

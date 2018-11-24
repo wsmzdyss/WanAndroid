@@ -51,7 +51,7 @@ class KnowFragment : BaseMvpFragment<HomePresenter>(), HomeView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+        //initView()
         //initData()
     }
 
@@ -98,7 +98,7 @@ class KnowFragment : BaseMvpFragment<HomePresenter>(), HomeView {
             setImages(imageList)
             setBannerTitles(titleList)
         }.start()
-        mPresenter.getArticleList(page, true)
+        mPresenter.getArticleList(page)
     }
 
     override fun bindPresenterView() {
@@ -135,6 +135,12 @@ class KnowFragment : BaseMvpFragment<HomePresenter>(), HomeView {
             }
         }
         swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun onAddCollectResult() {
+    }
+
+    override fun onCancelCollectResult() {
     }
 
     inner class GlideImageLoader : ImageLoader() {

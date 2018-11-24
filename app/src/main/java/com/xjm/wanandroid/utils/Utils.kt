@@ -26,4 +26,11 @@ object Utils {
         return sb.toString()
     }
 
+    fun encodeUsername(cookie: String): String {
+        return cookie
+            .split(";")
+            .filter { it.contains("UserName") }[0]
+            .split("=")[1]
+    }
+
 }

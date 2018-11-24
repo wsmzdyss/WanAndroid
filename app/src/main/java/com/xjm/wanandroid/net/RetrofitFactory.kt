@@ -42,7 +42,8 @@ class RetrofitFactory private constructor() {
             if (domain.isNotEmpty() && (
                         url.contains(Constant.COLLECTIONS_WEBSITE)
                                 || url.contains(Constant.UNCOLLECTIONS_WEBSITE)
-                                || url.contains(Constant.TODO_WEBSITE))
+                                || url.contains(Constant.TODO_WEBSITE)
+                                || url.contains(Constant.ARTICLE_WEBSITE))
             ) {
                 val cookie: String by Preference(domain, "")
                 if (cookie.isNotEmpty()) {
@@ -67,6 +68,8 @@ class RetrofitFactory private constructor() {
                 spUrl = cookie
                 var spDomain by Preference(domain, "")
                 spDomain = cookie
+                var spUsername by Preference(Constant.USERNAME, "")
+                spUsername = Utils.encodeUsername(cookie)
             }
 
             response

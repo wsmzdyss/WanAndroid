@@ -23,6 +23,7 @@ import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.jetbrains.anko.support.v4.toast
 
 
 /**
@@ -32,7 +33,6 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
 
     private var titleList = arrayListOf<String>()
     private var imageList = arrayListOf<String>()
-    private var articles = arrayListOf<Article>()
 
     private lateinit var banner: Banner
     private lateinit var parentView: View
@@ -95,7 +95,7 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
             setImages(imageList)
             setBannerTitles(titleList)
         }.start()
-        mPresenter.getArticleList(page, true)
+        mPresenter.getArticleList(page)
     }
 
     override fun bindPresenterView() {
@@ -124,7 +124,7 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
                     addData(it)
                 }
                 val size = it.size
-                if (size < articles.size) {
+                if (size < t.size) {
                     loadMoreEnd(isRefresh)
                 } else {
                     loadMoreComplete()
@@ -134,20 +134,41 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
         swipeRefreshLayout.isRefreshing = false
     }
 
+    override fun onAddCollectResult() {
+        toast("收藏成功")
+    }
+
+    override fun onCancelCollectResult() {
+        toast("取消收藏")
+    }
+
     inner class GlideImageLoader : ImageLoader() {
         override fun displayImage(context: Context, path: Any, imageView: ImageView) {
             Glide.with(context).load(path).into(imageView)
         }
     }
 
-    class HomeAdapter : BaseQuickAdapter<Article, BaseViewHolder>(R.layout.item_artical_list) {
+    inner class HomeAdapter : BaseQuickAdapter<Article, BaseViewHolder>(R.layout.item_artical_list) {
         override fun convert(helper: BaseViewHolder, item: Article) {
             helper.setText(R.id.tvTitle, item.title)
             helper.setText(R.id.tvAuthor, item.author)
             helper.setText(R.id.tvTime, item.niceDate)
-            helper.setText(R.id.tvChapter, "${item.superChapterName} / ${item.chapterName}")
-            helper.setChecked(R.id.checkBox, item.isChecked)
-            helper.getView<CheckBox>(R.id.checkBox).setOnCheckedChangeListener { _, isChecked -> item.isChecked = isChecked }
+            val chapterName = when {
+                item.superChapterName.isNullOrEmpty().not() and item.chapterName.isNullOrEmpty().not() -> "${item.superChapterName} / ${item.chapterName}"
+                item.superChapterName.isNullOrEmpty().not() -> item.superChapterName
+                item.chapterName.isNullOrEmpty().not() -> item.chapterName
+                else -> ""
+            }
+            helper.setText(R.id.tvChapter, chapterName)
+            helper.setChecked(R.id.checkBox, item.collect)
+            val checkBox = helper.getView<CheckBox>(R.id.checkBox)
+            checkBox.setOnClickListener {
+                if (checkBox.isChecked) {
+                    mPresenter.addCollect(item.id)
+                } else {
+                    mPresenter.cancelCollect(item.id)
+                }
+            }
         }
     }
 

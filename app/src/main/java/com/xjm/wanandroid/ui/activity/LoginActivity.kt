@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.View
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.base.BaseMvpActivity
+import com.xjm.wanandroid.bean.event.LoginEvent
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.bean.response.LoginResp
 import com.xjm.wanandroid.presenter.LoginPresenter
 import com.xjm.wanandroid.utils.textEnable
 import com.xjm.wanandroid.view.LoginView
 import kotlinx.android.synthetic.main.activity_login.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.toast
 
 /**
@@ -17,7 +19,7 @@ import org.jetbrains.anko.toast
  */
 class LoginActivity : BaseMvpActivity<LoginPresenter>(), LoginView {
 
-    private var isLogin = true
+    private var isLoginState = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,21 +33,19 @@ class LoginActivity : BaseMvpActivity<LoginPresenter>(), LoginView {
         btnLogin.textEnable(edtPassword2) { isBtnEnable() }
 
         btnLogin.setOnClickListener {
-            if (isLogin) {
+            if (isLoginState) {
                 mPresenter.login(edtUserName.text.toString(), edtPassword.text.toString())
             } else {
-//                mPresenter.register(
-//                    edtUserName.text.toString(),
-//                    edtPassword.text.toString(),
-//                    edtPassword2.text.toString()
-//                )
-
-                mPresenter.getCollectList()
+                mPresenter.register(
+                    edtUserName.text.toString(),
+                    edtPassword.text.toString(),
+                    edtPassword2.text.toString()
+                )
             }
         }
 
         tvRegister.setOnClickListener {
-            if (isLogin) {
+            if (isLoginState) {
                 btnLogin.text = "注册"
                 tvRegister.text = "已有账号？现在登录"
                 edtPassword2.visibility = View.VISIBLE
@@ -55,7 +55,7 @@ class LoginActivity : BaseMvpActivity<LoginPresenter>(), LoginView {
                 edtPassword2.visibility = View.GONE
             }
             btnLogin.isEnabled = isBtnEnable()
-            isLogin = isLogin.not()
+            isLoginState = isLoginState.not()
         }
     }
 
@@ -67,24 +67,19 @@ class LoginActivity : BaseMvpActivity<LoginPresenter>(), LoginView {
 
     override fun onLoginResult(t: LoginResp) {
         toast("登录成功 + ${t.id}")
-        edtUserName.setText("")
-        edtPassword.setText("")
-        edtPassword2.setText("")
+        isLogin = true
+        EventBus.getDefault().post(LoginEvent(t.username))
+        finish()
     }
 
     override fun onRegisterResult(t: LoginResp) {
         toast("注册成功 + ${t.id}")
-        edtUserName.setText("")
-        edtPassword.setText("")
-        edtPassword2.setText("")
-    }
-
-    override fun onArticleResult(t: ArticleListResp) {
-        toast(t.datas.toString())
+        isLogin = true
+        finish()
     }
 
     private fun isBtnEnable(): Boolean {
-        return when (isLogin) {
+        return when (isLoginState) {
             true -> {
                 edtUserName.text.isNullOrEmpty().not() &&
                         edtPassword.text.isNullOrEmpty().not()
@@ -96,4 +91,5 @@ class LoginActivity : BaseMvpActivity<LoginPresenter>(), LoginView {
             }
         }
     }
+
 }

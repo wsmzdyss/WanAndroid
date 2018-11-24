@@ -11,4 +11,8 @@ interface HomeView : BaseView {
     fun onBannerListResult(t : List<BannerResp>)
 
     fun onArticleListResult(t : ArticleListResp, isRefresh : Boolean)
+
+    fun onAddCollectResult()
+
+    fun onCancelCollectResult()
 }

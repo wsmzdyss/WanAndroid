@@ -3,14 +3,18 @@ package com.xjm.wanandroid.ui.activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBarDrawerToggle
+import android.view.Gravity
 import android.widget.TextView
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.base.BaseActivity
+import com.xjm.wanandroid.bean.event.LoginEvent
 import com.xjm.wanandroid.common.AppManager
 import com.xjm.wanandroid.ui.fragment.HomeFragment
 import com.xjm.wanandroid.ui.fragment.KnowFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import java.util.*
@@ -34,8 +38,11 @@ class MainActivity : BaseActivity() {
 
     private val mMineFragment by lazy { KnowFragment() }
 
+    private val tvUserName by lazy { naviView.getHeaderView(0).findViewById<TextView>(R.id.tvUsername) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
+        isEventBusRegister = true
         super.onCreate(savedInstanceState)
         initToolBar()
         initDrawer()
@@ -46,9 +53,33 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initView() {
-        nav_view.getHeaderView(0).findViewById<TextView>(R.id.tvUsername).setOnClickListener {
-            startActivity<LoginActivity>()
+        tvUserName?.apply {
+            when (isLogin) {
+                true -> {
+                    text = username
+                    setOnClickListener {
+                        //TODO
+                    }
+                }
+                false -> {
+                    text = "登录"
+                    setOnClickListener {
+                        drawerLayout.closeDrawer(Gravity.START)
+                        startActivity<LoginActivity>()
+                    }
+                }
+            }
         }
+
+        naviView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_collect -> {
+                    startActivity<CollectActivity>()
+                }
+            }
+            return@setNavigationItemSelectedListener false
+        }
+
     }
 
     private fun initDrawer() {
@@ -122,6 +153,11 @@ class MainActivity : BaseActivity() {
         } else {
             AppManager.instance.exitApp(this)
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(event: LoginEvent) {
+        tvUserName.text = event.username
     }
 
 }

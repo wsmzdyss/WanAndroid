@@ -1,6 +1,6 @@
 package com.xjm.wanandroid.net
 
-import com.xjm.wanandroid.bean.BaseResponse
+import com.xjm.wanandroid.base.BaseResponse
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.bean.response.BannerResp
 import com.xjm.wanandroid.bean.response.LoginResp
@@ -28,4 +28,10 @@ interface ApiService {
 
     @GET("/lg/collect/list/{page}/json")
     fun getCollectList(@Path("page") page: Int) : Observable<BaseResponse<ArticleListResp>>
+
+    @POST("/lg/collect/{id}/json")
+    fun addCollect(@Path("id") id: Int) : Observable<BaseResponse<Any>>
+
+    @POST("/lg/uncollect_originId/{id}/json")
+    fun cancelCollect(@Path("id") id: Int) : Observable<BaseResponse<Any>>
 }

@@ -39,15 +39,4 @@ class LoginPresenter : BasePresenter<LoginView>() {
             }, lifecycle)
     }
 
-    fun getCollectList() {
-        mView.showLoading()
-        RetrofitFactory.INSTANCE.create(ApiService::class.java)
-            .getCollectList(0)
-            .convert()
-            .execute(object : BaseSubscriber<ArticleListResp>(mView) {
-                override fun onNext(t: ArticleListResp) {
-                    mView.onArticleResult(t)
-                }
-            }, lifecycle)
-    }
 }

@@ -1,13 +1,11 @@
 package com.xjm.wanandroid.utils
 
-import android.app.Activity
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.trello.rxlifecycle2.LifecycleProvider
 import com.xjm.wanandroid.base.BaseSubscriber
 import com.xjm.wanandroid.base.DefaultTextWatcher
-import com.xjm.wanandroid.bean.BaseResponse
+import com.xjm.wanandroid.base.BaseResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function

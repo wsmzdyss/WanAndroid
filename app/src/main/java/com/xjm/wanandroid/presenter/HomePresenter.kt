@@ -1,6 +1,7 @@
 package com.xjm.wanandroid.presenter
 
 import com.xjm.wanandroid.base.BasePresenter
+import com.xjm.wanandroid.base.BaseResponse
 import com.xjm.wanandroid.base.BaseSubscriber
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.bean.response.BannerResp
@@ -9,6 +10,7 @@ import com.xjm.wanandroid.net.RetrofitFactory
 import com.xjm.wanandroid.utils.convert
 import com.xjm.wanandroid.utils.execute
 import com.xjm.wanandroid.view.HomeView
+import io.reactivex.functions.Consumer
 
 /**
  * Created by xjm on 2018/11/12.
@@ -27,7 +29,7 @@ class HomePresenter : BasePresenter<HomeView>() {
             }, lifecycle)
     }
 
-    fun getArticleList(page : Int, isRefresh : Boolean) {
+    fun getArticleList(page : Int, isRefresh : Boolean = true) {
         mView.showLoading()
         RetrofitFactory.INSTANCE.create(ApiService::class.java)
             .getArticleList(page)
@@ -35,6 +37,26 @@ class HomePresenter : BasePresenter<HomeView>() {
             .execute(object : BaseSubscriber<ArticleListResp>(mView) {
                 override fun onNext(t: ArticleListResp) {
                     mView.onArticleListResult(t, isRefresh)
+                }
+            }, lifecycle)
+    }
+
+    fun addCollect(id: Int) {
+        RetrofitFactory.INSTANCE.create(ApiService::class.java)
+            .addCollect(id)
+            .execute(object : BaseSubscriber<BaseResponse<Any>>(mView){
+                override fun onNext(t: BaseResponse<Any>) {
+                    mView.onAddCollectResult()
+                }
+            }, lifecycle)
+    }
+
+    fun cancelCollect(id: Int) {
+        RetrofitFactory.INSTANCE.create(ApiService::class.java)
+            .cancelCollect(id)
+            .execute(object : BaseSubscriber<BaseResponse<Any>>(mView) {
+                override fun onNext(t: BaseResponse<Any>) {
+                    mView.onCancelCollectResult()
                 }
             }, lifecycle)
     }
