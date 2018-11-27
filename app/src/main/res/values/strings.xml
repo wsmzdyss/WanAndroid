@@ -1,11 +1,14 @@
 <resources>
     <string name="app_name">WanAndroid</string>
 
-    <string name="nav_bar_home">首页</string>
-    <string name="nav_bar_knowledge">知识体系</string>
-    <string name="nav_bar_guide">导航</string>
-    <string name="nav_bar_project">项目</string>
-    <string name="nav_bar_wechat">公众号</string>
+    <string-array name="nav_bar">
+        <item name="nav_bar_home">首页</item>
+        <item name="nav_bar_knowledge">体系</item>
+        <item name="nav_bar_guide">导航</item>
+        <item name="nav_bar_project">项目</item>
+        <item name="nav_bar_wechat">公众号</item>
+    </string-array>
+
 
     <!-- Nav Action -->
     <string name="nav_my_collect">收藏</string>

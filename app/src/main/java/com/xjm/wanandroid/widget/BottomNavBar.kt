@@ -15,31 +15,31 @@ class BottomNavBar @JvmOverloads constructor(
 
     init {
         //首页
-        val homeItem = BottomNavigationItem(R.drawable.nav_home_selector,resources.getString(R.string.nav_bar_home))
+        val homeItem = BottomNavigationItem(R.drawable.nav_home_selector,resources.getStringArray(R.array.nav_bar)[0])
                 .setInactiveIconResource(R.drawable.nav_home_selector)
                 .setActiveColorResource(R.color.colorPrimary)
                 .setInActiveColorResource(R.color.gray)
 
         //知识体系
-        val knowItem = BottomNavigationItem(R.drawable.nav_know_selector,resources.getString(R.string.nav_bar_knowledge))
+        val knowItem = BottomNavigationItem(R.drawable.nav_know_selector,resources.getStringArray(R.array.nav_bar)[1])
                 .setInactiveIconResource(R.drawable.nav_know_selector)
                 .setActiveColorResource(R.color.colorPrimary)
                 .setInActiveColorResource(R.color.gray)
 
         //导航
-        val guideItem = BottomNavigationItem(R.drawable.nav_guide_selector,resources.getString(R.string.nav_bar_guide))
+        val guideItem = BottomNavigationItem(R.drawable.nav_guide_selector,resources.getStringArray(R.array.nav_bar)[2])
                 .setInactiveIconResource(R.drawable.nav_guide_selector)
                 .setActiveColorResource(R.color.colorPrimary)
                 .setInActiveColorResource(R.color.gray)
 
         //项目
-        val projectItem = BottomNavigationItem(R.drawable.nav_project_selector,resources.getString(R.string.nav_bar_project))
+        val projectItem = BottomNavigationItem(R.drawable.nav_project_selector,resources.getStringArray(R.array.nav_bar)[3])
                 .setInactiveIconResource(R.drawable.nav_project_selector)
                 .setActiveColorResource(R.color.colorPrimary)
                 .setInActiveColorResource(R.color.gray)
 
         //公众号
-        val wechatItem = BottomNavigationItem(R.drawable.nav_wechat_selector,resources.getString(R.string.nav_bar_wechat))
+        val wechatItem = BottomNavigationItem(R.drawable.nav_wechat_selector,resources.getStringArray(R.array.nav_bar)[4])
             .setInactiveIconResource(R.drawable.nav_wechat_selector)
             .setActiveColorResource(R.color.colorPrimary)
             .setInActiveColorResource(R.color.gray)

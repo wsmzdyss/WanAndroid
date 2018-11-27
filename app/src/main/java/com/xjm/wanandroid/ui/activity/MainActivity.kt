@@ -40,6 +40,8 @@ class MainActivity : BaseActivity() {
 
     private val tvUserName by lazy { naviView.getHeaderView(0).findViewById<TextView>(R.id.tvUsername) }
 
+    private val navBarStrings: Array<String> by lazy {resources.getStringArray(R.array.nav_bar)}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
         isEventBusRegister = true
@@ -74,6 +76,7 @@ class MainActivity : BaseActivity() {
         naviView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_collect -> {
+                    drawerLayout.closeDrawer(Gravity.START)
                     startActivity<CollectActivity>()
                 }
             }
@@ -97,23 +100,26 @@ class MainActivity : BaseActivity() {
 
     private fun initToolBar() {
         toolbar.apply {
-            title = "Wan Android"
+            title = navBarStrings[0]
             setSupportActionBar(this)
         }
     }
 
     private fun initBottomNav() {
-        bottomNavBar.setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
-            override fun onTabReselected(position: Int) {
-            }
+        bottomNavBar.apply {
+            setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
+                override fun onTabReselected(position: Int) {
+                }
 
-            override fun onTabUnselected(position: Int) {
-            }
+                override fun onTabUnselected(position: Int) {
+                }
 
-            override fun onTabSelected(position: Int) {
-                changeFragment(position)
-            }
-        })
+                override fun onTabSelected(position: Int) {
+                    changeFragment(position)
+                    toolbar.title = navBarStrings[position]
+                }
+            })
+        }
     }
 
     private fun changeFragment(position: Int) {
@@ -146,6 +152,10 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawer(Gravity.START)
+            return
+        }
         val curTime = System.currentTimeMillis()
         if (curTime - pressTime > 2000) {
             toast("再按一次退出程序")

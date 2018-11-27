@@ -18,12 +18,14 @@ import com.xjm.wanandroid.bean.response.Article
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.bean.response.BannerResp
 import com.xjm.wanandroid.presenter.HomePresenter
+import com.xjm.wanandroid.ui.activity.ArticleActivity
 import com.xjm.wanandroid.view.HomeView
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.loader.ImageLoader
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.support.v4.startActivity
 
 
 /**
@@ -33,6 +35,7 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
 
     private var titleList = arrayListOf<String>()
     private var imageList = arrayListOf<String>()
+    private var bannerList = arrayListOf<BannerResp>()
 
     private lateinit var banner: Banner
     private lateinit var parentView: View
@@ -56,6 +59,9 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
         //Banner
         parentView = LayoutInflater.from(context).inflate(R.layout.item_home_banner, null)
         banner = parentView.findViewById(R.id.banner)
+        banner.setOnBannerListener {
+            startActivity<ArticleActivity>("webUrl" to bannerList[it].url, "webTitle" to bannerList[it].title)
+        }
 
         //RecyclerView
         adapter = HomeAdapter()
@@ -73,6 +79,9 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
                 page++
                 mPresenter.getArticleList(page, false)
             }, recyclerView)
+            setOnItemClickListener { _, _, position ->
+                startActivity<ArticleActivity>("webUrl" to data[position].link, "webTitle" to data[position].title)
+            }
         }
 
         //SwipeRefreshLayout
@@ -108,6 +117,8 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
         page = 0
         titleList.clear()
         imageList.clear()
+        bannerList.clear()
+        bannerList.addAll(t)
         for (it in t) {
             titleList.add(it.title)
             imageList.add(it.imagePath)

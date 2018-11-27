@@ -12,6 +12,7 @@ import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.presenter.CollectPresenter
 import com.xjm.wanandroid.view.CollectView
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.jetbrains.anko.startActivity
 
 /**
  * Created by xjm on 2018/11/24.
@@ -45,6 +46,9 @@ class CollectActivity : BaseMvpActivity<CollectPresenter>(), CollectView {
                 page++
                 mPresenter.getCollectList(page, false)
             }, recyclerView)
+            setOnItemClickListener { _, _, position ->
+                startActivity<ArticleActivity>("webUrl" to data[position].link, "webTitle" to data[position].title)
+            }
         }
 
         //SwipeRefreshLayout
