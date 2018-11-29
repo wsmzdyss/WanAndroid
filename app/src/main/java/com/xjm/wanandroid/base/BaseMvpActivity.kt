@@ -1,11 +1,13 @@
 package com.xjm.wanandroid.base
 
-import android.app.ProgressDialog
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.widget.ImageView
 import android.widget.TextView
+import com.xjm.wanandroid.R
 import com.xjm.wanandroid.common.BaseToolbarInterface
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.jetbrains.anko.toast
 
 /**
@@ -16,21 +18,19 @@ abstract class BaseMvpActivity<T: BasePresenter<*>> : BaseActivity(), BaseView, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindPresenterView()
-        mLoadingProgressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+        swipeRefreshLayout = contentView.findViewById(R.id.swipeRefreshLayout)
     }
+
+    lateinit var swipeRefreshLayout : SwipeRefreshLayout
 
     lateinit var mPresenter: T
 
-    private val mLoadingProgressBar: ProgressDialog by lazy {
-        ProgressDialog(this)
-    }
-
     override fun showLoading() {
-        mLoadingProgressBar.show()
+        swipeRefreshLayout.isRefreshing = true
     }
 
     override fun hideLoading() {
-        mLoadingProgressBar.hide()
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun onError(text: String) {

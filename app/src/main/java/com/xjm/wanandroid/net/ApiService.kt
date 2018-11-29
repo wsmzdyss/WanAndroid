@@ -44,4 +44,10 @@ interface ApiService {
 
     @GET("/wxarticle/list/{cid}/{page}/json")
     fun getWechatList(@Path("page") page: Int, @Path("cid") cid: Int) : Observable<BaseResponse<ArticleListResp>>
+
+    @GET("/project/tree/json")
+    fun getProjectTree() : Observable<BaseResponse<List<KnowChildren>>>
+
+    @GET("/project/list/{page}/json")
+    fun getProjectList(@Path("page") page: Int, @Query("cid") cid: Int) : Observable<BaseResponse<ArticleListResp>>
 }

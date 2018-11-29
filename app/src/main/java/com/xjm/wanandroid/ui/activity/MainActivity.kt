@@ -2,6 +2,7 @@ package com.xjm.wanandroid.ui.activity
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Gravity
 import android.widget.TextView
@@ -12,6 +13,7 @@ import com.xjm.wanandroid.bean.event.LoginEvent
 import com.xjm.wanandroid.common.AppManager
 import com.xjm.wanandroid.ui.fragment.HomeFragment
 import com.xjm.wanandroid.ui.fragment.KnowFragment
+import com.xjm.wanandroid.ui.fragment.ProjectFragment
 import com.xjm.wanandroid.ui.fragment.WechatFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.Subscribe
@@ -27,21 +29,21 @@ class MainActivity : BaseActivity() {
 
     private var pressTime: Long = 0
 
-    private val mStack = Stack<Fragment>()
+    private var mHomeFragment: HomeFragment? = null
 
-    private val mHomeFragment by lazy { HomeFragment() }
+    private var mKnowFragment: KnowFragment? = null
 
-    private val mKnowFragment by lazy { KnowFragment() }
+    private var mGuideFragment: KnowFragment? = null
 
-    private val mGuidFragment by lazy { KnowFragment() }
+    private var mProjectFragment: ProjectFragment? = null
 
-    private val mProjectFragment by lazy { KnowFragment() }
-
-    private val mWechatFragment by lazy { WechatFragment() }
+    private var mWechatFragment: WechatFragment? = null
 
     private val tvUserName by lazy { naviView.getHeaderView(0).findViewById<TextView>(R.id.tvUsername) }
 
-    private val navBarStrings: Array<String> by lazy {resources.getStringArray(R.array.nav_bar)}
+    private val navBarStrings: Array<String> by lazy { resources.getStringArray(R.array.nav_bar) }
+
+    private var mIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
@@ -49,10 +51,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         initToolBar()
         initDrawer()
-        initFragment()
         initBottomNav()
         initView()
-        changeFragment(0)
+        showFragment(mIndex)
     }
 
     private fun initView() {
@@ -117,41 +118,12 @@ class MainActivity : BaseActivity() {
                 }
 
                 override fun onTabSelected(position: Int) {
-                    changeFragment(position)
-                    toolbar.title = navBarStrings[position]
+                    showFragment(position)
                 }
             })
         }
     }
 
-    private fun changeFragment(position: Int) {
-        val manager = supportFragmentManager.beginTransaction()
-        for (it in mStack) {
-            manager.hide(it)
-        }
-
-        manager.show(mStack[position]).commit()
-    }
-
-    private fun initFragment() {
-        val manager = supportFragmentManager.beginTransaction()
-        manager.apply {
-            add(R.id.container, mHomeFragment)
-            add(R.id.container, mKnowFragment)
-            add(R.id.container, mGuidFragment)
-            add(R.id.container, mProjectFragment)
-            add(R.id.container, mWechatFragment)
-        }.commit()
-
-        mStack.apply {
-            add(mHomeFragment)
-            add(mKnowFragment)
-            add(mGuidFragment)
-            add(mProjectFragment)
-            add(mWechatFragment)
-        }
-
-    }
 
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(Gravity.START)) {
@@ -170,6 +142,76 @@ class MainActivity : BaseActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(event: LoginEvent) {
         tvUserName.text = event.username
+    }
+
+    /**
+     * 展示Fragment
+     * @param index
+     */
+    private fun showFragment(index: Int) {
+        val transaction = supportFragmentManager.beginTransaction()
+        hideFragments(transaction)
+        mIndex = index
+        toolbar.title = navBarStrings[index]
+        when (index) {
+            0 // 首页
+            -> {
+                if (mHomeFragment == null) {
+                    mHomeFragment = HomeFragment()
+                    transaction.add(R.id.container, mHomeFragment!!, "home")
+                } else {
+                    transaction.show(mHomeFragment!!)
+                }
+            }
+            1 // 知识体系
+            -> {
+                if (mKnowFragment == null) {
+                    mKnowFragment = KnowFragment()
+                    transaction.add(R.id.container, mKnowFragment!!, "know")
+                } else {
+                    transaction.show(mKnowFragment!!)
+                }
+            }
+            2 // 导航
+            -> {
+                if (mGuideFragment == null) {
+                    mGuideFragment = KnowFragment()
+                    transaction.add(R.id.container, mGuideFragment!!, "guide")
+                } else {
+                    transaction.show(mGuideFragment!!)
+                }
+            }
+            3 // 项目
+            -> {
+                if (mProjectFragment == null) {
+                    mProjectFragment = ProjectFragment()
+                    transaction.add(R.id.container, mProjectFragment!!, "project")
+                } else {
+                    transaction.show(mProjectFragment!!)
+                }
+            }
+            4 // 公众号
+            -> {
+                if (mWechatFragment == null) {
+                    mWechatFragment = WechatFragment()
+                    transaction.add(R.id.container, mWechatFragment!!, "wechat")
+                } else {
+                    transaction.show(mWechatFragment!!)
+                }
+            }
+        }
+        transaction.commit()
+    }
+
+    /**
+     * 隐藏所有的Fragment
+     */
+    private fun hideFragments(transaction: FragmentTransaction) {
+        mHomeFragment?.let { transaction.hide(it) }
+        mKnowFragment?.let { transaction.hide(it) }
+        mGuideFragment?.let { transaction.hide(it) }
+        mProjectFragment?.let { transaction.hide(it) }
+        mWechatFragment?.let { transaction.hide(it) }
     }
 
 }

@@ -87,7 +87,7 @@ class CollectActivity : BaseMvpActivity<CollectPresenter>(), CollectView {
                 }
             }
         }
-        swipeRefreshLayout.isRefreshing = false
+        //swipeRefreshLayout.isRefreshing = false
     }
 
     inner class CollectAdapter : BaseQuickAdapter<Article, BaseViewHolder>(R.layout.item_artical_list) {

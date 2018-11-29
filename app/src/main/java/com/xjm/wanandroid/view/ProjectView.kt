@@ -7,6 +7,6 @@ import com.xjm.wanandroid.bean.response.KnowChildren
 /**
  * Created by xjm on 2018/11/24.
  */
-interface WechatView : BaseView {
-    fun onWechatTreeResult(t : List<KnowChildren>)
+interface ProjectView : BaseView {
+    fun onProjectTreeResult(t : List<KnowChildren>)
 }

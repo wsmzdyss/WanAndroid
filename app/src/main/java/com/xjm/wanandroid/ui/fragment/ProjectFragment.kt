@@ -11,25 +11,25 @@ import android.view.ViewGroup
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.base.BaseMvpFragment
 import com.xjm.wanandroid.bean.response.KnowChildren
-import com.xjm.wanandroid.presenter.WechatPresenter
+import com.xjm.wanandroid.presenter.ProjectPresenter
 import com.xjm.wanandroid.ui.activity.MainActivity
-import com.xjm.wanandroid.view.WechatView
+import com.xjm.wanandroid.view.ProjectView
 import kotlinx.android.synthetic.main.fragment_know_child.*
 
 /**
  * Created by xjm on 2018/11/28.
  */
-class WechatFragment : BaseMvpFragment<WechatPresenter>(), WechatView {
+class ProjectFragment : BaseMvpFragment<ProjectPresenter>(), ProjectView {
 
     private val childList = arrayListOf<KnowChildren>()
 
     override fun bindPresenterView() {
-        mPresenter = WechatPresenter()
+        mPresenter = ProjectPresenter()
         mPresenter.mView = this
         mPresenter.lifecycle = this
     }
 
-    override fun onWechatTreeResult(t: List<KnowChildren>) {
+    override fun onProjectTreeResult(t: List<KnowChildren>) {
         childList.clear()
         childList.addAll(t)
         initView()
@@ -37,30 +37,30 @@ class WechatFragment : BaseMvpFragment<WechatPresenter>(), WechatView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_wechat, container, false)
+        return inflater.inflate(R.layout.fragment_project, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mPresenter.getWechatTree()
+        mPresenter.getProjectTree()
     }
 
     private fun initView() {
         viewPager.apply {
-            adapter = WechatPagerAdapter(childList, (context as MainActivity).supportFragmentManager)
+            adapter = ProjectPagerAdapter(childList, (context as MainActivity).supportFragmentManager)
             offscreenPageLimit = childList.size
         }
         tabLayout.setupWithViewPager(viewPager)
     }
 
-    inner class WechatPagerAdapter(val list: List<KnowChildren>, fm: FragmentManager) :
+    inner class ProjectPagerAdapter(val list: List<KnowChildren>, fm: FragmentManager) :
         FragmentStatePagerAdapter(fm) {
         private val fragments = arrayListOf<Fragment>()
 
         init {
             fragments.clear()
             list.forEach {
-                fragments.add(WechatChildFragment.getInstance(it.id))
+                fragments.add(ProjectChildFragment.getInstance(it.id))
             }
         }
 
