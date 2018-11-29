@@ -1,9 +1,7 @@
 package com.xjm.wanandroid.net
 
 import com.xjm.wanandroid.base.BaseResponse
-import com.xjm.wanandroid.bean.response.ArticleListResp
-import com.xjm.wanandroid.bean.response.BannerResp
-import com.xjm.wanandroid.bean.response.LoginResp
+import com.xjm.wanandroid.bean.response.*
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -34,4 +32,16 @@ interface ApiService {
 
     @POST("/lg/uncollect_originId/{id}/json")
     fun cancelCollect(@Path("id") id: Int) : Observable<BaseResponse<Any>>
+
+    @GET("/tree/json")
+    fun getKnowTree() : Observable<BaseResponse<List<KnowChildren>>>
+
+    @GET("/article/list/{page}/json")
+    fun getKnowList(@Path("page") page: Int, @Query("cid") cid: Int) : Observable<BaseResponse<ArticleListResp>>
+
+    @GET("/wxarticle/chapters/json")
+    fun getWechatTree() : Observable<BaseResponse<List<KnowChildren>>>
+
+    @GET("/wxarticle/list/{cid}/{page}/json")
+    fun getWechatList(@Path("page") page: Int, @Path("cid") cid: Int) : Observable<BaseResponse<ArticleListResp>>
 }

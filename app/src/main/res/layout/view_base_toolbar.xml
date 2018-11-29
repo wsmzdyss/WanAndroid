@@ -12,7 +12,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
             android:background="@color/colorPrimary"
-            android:elevation="4dp">
+            android:elevation="0dp">
 
         <ImageView
                 android:id="@+id/button_back_base"

@@ -12,7 +12,4 @@ interface HomeView : BaseView {
 
     fun onArticleListResult(t : ArticleListResp, isRefresh : Boolean)
 
-    fun onAddCollectResult()
-
-    fun onCancelCollectResult()
 }

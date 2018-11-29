@@ -1,160 +1,89 @@
 package com.xjm.wanandroid.ui.fragment
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.base.BaseMvpFragment
-import com.xjm.wanandroid.bean.response.Article
-import com.xjm.wanandroid.bean.response.ArticleListResp
-import com.xjm.wanandroid.bean.response.BannerResp
-import com.xjm.wanandroid.presenter.HomePresenter
-import com.xjm.wanandroid.view.HomeView
-import com.youth.banner.Banner
-import com.youth.banner.BannerConfig
-import com.youth.banner.loader.ImageLoader
+import com.xjm.wanandroid.bean.response.KnowChildren
+import com.xjm.wanandroid.presenter.KnowPresenter
+import com.xjm.wanandroid.ui.activity.KnowChildActivity
+import com.xjm.wanandroid.view.KnowView
 import kotlinx.android.synthetic.main.fragment_home.*
-import android.widget.RelativeLayout
-import org.jetbrains.anko.support.v4.dip
+import java.io.Serializable
 
 
 /**
  * Created by xjm on 2018/11/15.
  */
-class KnowFragment : BaseMvpFragment<HomePresenter>(), HomeView {
+class KnowFragment : BaseMvpFragment<KnowPresenter>(), KnowView {
 
-    private var titleList = arrayListOf<String>()
-    private var imageList = arrayListOf<String>()
-    private var articals = arrayListOf<Article>()
-
-    private lateinit var banner: Banner
-    private lateinit var parentView: View
-
-    private lateinit var adapter: HomeAdapter
-
-    private var page = 0
+    private lateinit var adapter: KnowAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_know, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //initView()
-        //initData()
+        initView()
+        mPresenter.getKnowTree()
     }
 
     private fun initView() {
-        //Banner
-        parentView = LayoutInflater.from(context).inflate(R.layout.item_home_banner, null)
-        banner = parentView.findViewById(R.id.banner)
-
         //RecyclerView
-        adapter = HomeAdapter()
+        adapter = KnowAdapter()
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
 
-        recyclerView?.apply {
-            this.layoutManager = layoutManager
-            this.adapter = adapter
-            this.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        recyclerView?.let {
+            it.layoutManager = layoutManager
+            it.adapter = adapter
+            it.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
         adapter.apply {
-            addHeaderView(parentView)
-            setOnLoadMoreListener({
-                page++
-                mPresenter.getArticleList(page, false)
-            }, recyclerView)
+            setOnItemClickListener { _, _, position ->
+                val intent = Intent(context, KnowChildActivity::class.java)
+                intent.putExtra("childList", data[position].children as Serializable)
+                startActivity(intent)
+            }
         }
 
-        //SwipeRefreshLayout
         swipeRefreshLayout.apply {
             setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
             setOnRefreshListener {
-                initData()
+                mPresenter.getKnowTree()
             }
         }
     }
 
-    private fun initData() {
-        mPresenter.getBannerList()
-    }
-
-    private fun initBanner() {
-        banner.apply {
-            setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE)
-            setImageLoader(GlideImageLoader())
-            setImages(imageList)
-            setBannerTitles(titleList)
-        }.start()
-        mPresenter.getArticleList(page)
-    }
-
-    override fun bindPresenterView() {
-        mPresenter = HomePresenter()
-        mPresenter.mView = this
-        mPresenter.lifecycle = this
-    }
-
-    override fun onBannerListResult(t: List<BannerResp>) {
-        page = 0
-        titleList.clear()
-        imageList.clear()
-        for (it in t) {
-            titleList.add(it.title)
-            imageList.add(it.imagePath)
-        }
-        initBanner()
-    }
-
-    override fun onArticleListResult(t: ArticleListResp, isRefresh: Boolean) {
-        t.datas.let {
-            adapter.run {
-                if (isRefresh) {
-                    replaceData(it)
-                } else {
-                    addData(it)
-                }
-                val size = it.size
-                if (size < articals.size) {
-                    loadMoreEnd(isRefresh)
-                } else {
-                    loadMoreComplete()
-                }
-            }
-        }
+    override fun onKnowTreeResult(t: List<KnowChildren>) {
+        adapter.replaceData(t)
         swipeRefreshLayout.isRefreshing = false
     }
 
-    override fun onAddCollectResult() {
-    }
-
-    override fun onCancelCollectResult() {
-    }
-
-    inner class GlideImageLoader : ImageLoader() {
-        override fun displayImage(context: Context, path: Any, imageView: ImageView) {
-            Glide.with(context).load(path).into(imageView)
+    inner class KnowAdapter : BaseQuickAdapter<KnowChildren, BaseViewHolder>(R.layout.item_know) {
+        override fun convert(helper: BaseViewHolder, item: KnowChildren) {
+            helper.setText(R.id.tvTitle, item.name)
+            val sb = StringBuilder()
+            for (it in item.children) {
+                sb.append("${it.name}  ")
+            }
+            helper.setText(R.id.tvName, sb)
         }
     }
 
-    class HomeAdapter : BaseQuickAdapter<Article, BaseViewHolder>(R.layout.item_artical_list) {
-        override fun convert(helper: BaseViewHolder, item: Article) {
-            helper.setText(R.id.tvTitle, item.title)
-            helper.setText(R.id.tvAuthor, item.author)
-            helper.setText(R.id.tvTime, item.niceDate)
-        }
+    override fun bindPresenterView() {
+        mPresenter = KnowPresenter()
+        mPresenter.mView = this
+        mPresenter.lifecycle = this
     }
 
 }

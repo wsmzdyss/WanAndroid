@@ -12,6 +12,7 @@ import com.xjm.wanandroid.bean.event.LoginEvent
 import com.xjm.wanandroid.common.AppManager
 import com.xjm.wanandroid.ui.fragment.HomeFragment
 import com.xjm.wanandroid.ui.fragment.KnowFragment
+import com.xjm.wanandroid.ui.fragment.WechatFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -36,7 +37,7 @@ class MainActivity : BaseActivity() {
 
     private val mProjectFragment by lazy { KnowFragment() }
 
-    private val mMineFragment by lazy { KnowFragment() }
+    private val mWechatFragment by lazy { WechatFragment() }
 
     private val tvUserName by lazy { naviView.getHeaderView(0).findViewById<TextView>(R.id.tvUsername) }
 
@@ -99,6 +100,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initToolBar() {
+        appBar.stateListAnimator = null
         toolbar.apply {
             title = navBarStrings[0]
             setSupportActionBar(this)
@@ -138,7 +140,7 @@ class MainActivity : BaseActivity() {
             add(R.id.container, mKnowFragment)
             add(R.id.container, mGuidFragment)
             add(R.id.container, mProjectFragment)
-            add(R.id.container, mMineFragment)
+            add(R.id.container, mWechatFragment)
         }.commit()
 
         mStack.apply {
@@ -146,7 +148,7 @@ class MainActivity : BaseActivity() {
             add(mKnowFragment)
             add(mGuidFragment)
             add(mProjectFragment)
-            add(mMineFragment)
+            add(mWechatFragment)
         }
 
     }

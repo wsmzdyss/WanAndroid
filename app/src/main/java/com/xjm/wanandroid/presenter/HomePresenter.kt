@@ -41,24 +41,4 @@ class HomePresenter : BasePresenter<HomeView>() {
             }, lifecycle)
     }
 
-    fun addCollect(id: Int) {
-        RetrofitFactory.INSTANCE.create(ApiService::class.java)
-            .addCollect(id)
-            .execute(object : BaseSubscriber<BaseResponse<Any>>(mView){
-                override fun onNext(t: BaseResponse<Any>) {
-                    mView.onAddCollectResult()
-                }
-            }, lifecycle)
-    }
-
-    fun cancelCollect(id: Int) {
-        RetrofitFactory.INSTANCE.create(ApiService::class.java)
-            .cancelCollect(id)
-            .execute(object : BaseSubscriber<BaseResponse<Any>>(mView) {
-                override fun onNext(t: BaseResponse<Any>) {
-                    mView.onCancelCollectResult()
-                }
-            }, lifecycle)
-    }
-
 }

@@ -26,4 +26,6 @@ object Constant {
 
     const val COOKIE_NAME = "Cookie"
     const val SET_COOKIE_KEY = "set-cookie"
+
+    const val CONTENT_CID_KEY = "cid"
 }
