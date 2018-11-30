@@ -5,7 +5,6 @@ import android.view.View
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.base.BaseMvpActivity
 import com.xjm.wanandroid.bean.event.LoginEvent
-import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.bean.response.LoginResp
 import com.xjm.wanandroid.presenter.LoginPresenter
 import com.xjm.wanandroid.utils.textEnable

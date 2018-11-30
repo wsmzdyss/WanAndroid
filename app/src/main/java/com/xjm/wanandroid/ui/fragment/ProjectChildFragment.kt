@@ -3,9 +3,7 @@ package com.xjm.wanandroid.ui.fragment
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.adapter.ArticleAdapter
 import com.xjm.wanandroid.base.BaseMvpFragment
@@ -14,13 +12,14 @@ import com.xjm.wanandroid.presenter.ProjectChildPresenter
 import com.xjm.wanandroid.ui.activity.ArticleActivity
 import com.xjm.wanandroid.utils.Constant
 import com.xjm.wanandroid.view.ProjectChildView
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_project_child_list.*
 import org.jetbrains.anko.support.v4.startActivity
 
 /**
  * Created by xjm on 2018/11/28.
  */
 class ProjectChildFragment : BaseMvpFragment<ProjectChildPresenter>(), ProjectChildView {
+    override fun attachLayoutRes(): Int = R.layout.fragment_project_child_list
 
     companion object {
         fun getInstance(cid: Int) : ProjectChildFragment {
@@ -37,11 +36,6 @@ class ProjectChildFragment : BaseMvpFragment<ProjectChildPresenter>(), ProjectCh
     private var page = 1
 
     private var cid = 0
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_project_child_list, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,13 +65,6 @@ class ProjectChildFragment : BaseMvpFragment<ProjectChildPresenter>(), ProjectCh
             }
         }
 
-        //SwipeRefreshLayout
-        swipeRefreshLayout.apply {
-            setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
-            setOnRefreshListener {
-                initData()
-            }
-        }
     }
 
     private fun initData() {
@@ -107,6 +94,9 @@ class ProjectChildFragment : BaseMvpFragment<ProjectChildPresenter>(), ProjectCh
                 }
             }
         }
-        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun refreshData() {
+        initData()
     }
 }

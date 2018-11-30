@@ -19,18 +19,24 @@ abstract class BaseMvpActivity<T: BasePresenter<*>> : BaseActivity(), BaseView, 
         super.onCreate(savedInstanceState)
         bindPresenterView()
         swipeRefreshLayout = contentView.findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout?.apply {
+            setColorSchemeColors(getColor(R.color.colorPrimary))
+            setOnRefreshListener {
+                refreshData()
+            }
+        }
     }
 
-    lateinit var swipeRefreshLayout : SwipeRefreshLayout
+    var swipeRefreshLayout : SwipeRefreshLayout? = null
 
     lateinit var mPresenter: T
 
     override fun showLoading() {
-        swipeRefreshLayout.isRefreshing = true
+        swipeRefreshLayout?.isRefreshing = true
     }
 
     override fun hideLoading() {
-        swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout?.isRefreshing = false
     }
 
     override fun onError(text: String) {
@@ -38,6 +44,8 @@ abstract class BaseMvpActivity<T: BasePresenter<*>> : BaseActivity(), BaseView, 
     }
 
     abstract fun bindPresenterView()
+
+    protected open fun refreshData() {}
 
     override fun initToolbar(toolbar: Toolbar, center: TextView, right: TextView, back: ImageView) {
     }

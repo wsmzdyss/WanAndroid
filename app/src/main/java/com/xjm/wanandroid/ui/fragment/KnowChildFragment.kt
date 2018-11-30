@@ -23,6 +23,8 @@ import org.jetbrains.anko.support.v4.startActivity
  */
 class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
 
+    override fun attachLayoutRes(): Int = R.layout.fragment_know_child_list
+
     companion object {
         fun getInstance(cid: Int): KnowChildFragment {
             val fragment = KnowChildFragment()
@@ -38,11 +40,6 @@ class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
     private var page = 0
 
     private var cid = 0
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_know_child_list, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,13 +69,6 @@ class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
             }
         }
 
-        //SwipeRefreshLayout
-        swipeRefreshLayout.apply {
-            setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
-            setOnRefreshListener {
-                initData()
-            }
-        }
     }
 
     private fun initData() {
@@ -109,6 +99,9 @@ class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
                 }
             }
         }
-        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun refreshData() {
+        initData()
     }
 }

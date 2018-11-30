@@ -3,21 +3,15 @@ package com.xjm.wanandroid.ui.fragment
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.adapter.ArticleAdapter
 import com.xjm.wanandroid.base.BaseMvpFragment
-import com.xjm.wanandroid.bean.response.Article
 import com.xjm.wanandroid.bean.response.ArticleListResp
-import com.xjm.wanandroid.presenter.KnowChildPresenter
 import com.xjm.wanandroid.presenter.WechatChildPresenter
 import com.xjm.wanandroid.ui.activity.ArticleActivity
 import com.xjm.wanandroid.utils.Constant
-import com.xjm.wanandroid.view.KnowChildView
 import com.xjm.wanandroid.view.WechatChildView
-import com.xjm.wanandroid.view.WechatView
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.jetbrains.anko.support.v4.startActivity
 
@@ -25,6 +19,7 @@ import org.jetbrains.anko.support.v4.startActivity
  * Created by xjm on 2018/11/28.
  */
 class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChildView {
+    override fun attachLayoutRes(): Int = R.layout.fragment_wechat_child_list
 
     companion object {
         fun getInstance(cid: Int) : WechatChildFragment {
@@ -41,11 +36,6 @@ class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChild
     private var page = 1
 
     private var cid = 0
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_wechat_child_list, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,13 +65,6 @@ class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChild
             }
         }
 
-        //SwipeRefreshLayout
-        swipeRefreshLayout.apply {
-            setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
-            setOnRefreshListener {
-                initData()
-            }
-        }
     }
 
     private fun initData() {
@@ -111,6 +94,9 @@ class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChild
                 }
             }
         }
-        swipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun refreshData() {
+        initData()
     }
 }

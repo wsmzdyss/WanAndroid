@@ -11,7 +11,7 @@ import com.xjm.wanandroid.bean.response.Article
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.presenter.CollectPresenter
 import com.xjm.wanandroid.view.CollectView
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.activity_collect.*
 import org.jetbrains.anko.startActivity
 
 /**
@@ -51,13 +51,6 @@ class CollectActivity : BaseMvpActivity<CollectPresenter>(), CollectView {
             }
         }
 
-        //SwipeRefreshLayout
-        swipeRefreshLayout.apply {
-            setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
-            setOnRefreshListener {
-                initData()
-            }
-        }
     }
 
     private fun initData() {
@@ -104,5 +97,9 @@ class CollectActivity : BaseMvpActivity<CollectPresenter>(), CollectView {
             }
             helper.setText(R.id.tvChapter, chapterName)
         }
+    }
+
+    override fun refreshData() {
+        initData()
     }
 }

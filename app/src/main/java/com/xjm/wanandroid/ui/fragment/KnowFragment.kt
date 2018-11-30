@@ -4,9 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.xjm.wanandroid.R
@@ -15,7 +13,7 @@ import com.xjm.wanandroid.bean.response.KnowChildren
 import com.xjm.wanandroid.presenter.KnowPresenter
 import com.xjm.wanandroid.ui.activity.KnowChildActivity
 import com.xjm.wanandroid.view.KnowView
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_know.*
 import java.io.Serializable
 
 
@@ -23,17 +21,17 @@ import java.io.Serializable
  * Created by xjm on 2018/11/15.
  */
 class KnowFragment : BaseMvpFragment<KnowPresenter>(), KnowView {
+    override fun attachLayoutRes(): Int = R.layout.fragment_know
 
     private lateinit var adapter: KnowAdapter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_know, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initData()
+    }
+
+    private fun initData() {
         mPresenter.getKnowTree()
     }
 
@@ -55,18 +53,10 @@ class KnowFragment : BaseMvpFragment<KnowPresenter>(), KnowView {
                 startActivity(intent)
             }
         }
-
-        swipeRefreshLayout.apply {
-            setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
-            setOnRefreshListener {
-                mPresenter.getKnowTree()
-            }
-        }
     }
 
     override fun onKnowTreeResult(t: List<KnowChildren>) {
         adapter.replaceData(t)
-        swipeRefreshLayout.isRefreshing = false
     }
 
     inner class KnowAdapter : BaseQuickAdapter<KnowChildren, BaseViewHolder>(R.layout.item_know) {

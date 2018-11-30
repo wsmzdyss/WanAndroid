@@ -6,7 +6,6 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.xjm.wanandroid.R
@@ -29,6 +28,8 @@ import org.jetbrains.anko.support.v4.startActivity
  */
 class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
 
+    override fun attachLayoutRes(): Int = R.layout.fragment_home
+
     private var titleList = arrayListOf<String>()
     private var imageList = arrayListOf<String>()
     private var bannerList = arrayListOf<BannerResp>()
@@ -39,11 +40,6 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
     private lateinit var adapter: ArticleAdapter
 
     private var page = 0
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,13 +76,6 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
             }
         }
 
-        //SwipeRefreshLayout
-        swipeRefreshLayout.apply {
-            setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
-            setOnRefreshListener {
-                initData()
-            }
-        }
     }
 
     private fun initData() {
@@ -138,7 +127,6 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
                 }
             }
         }
-        swipeRefreshLayout.isRefreshing = false
     }
 
     inner class GlideImageLoader : ImageLoader() {
@@ -147,6 +135,8 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
         }
     }
 
-
+    override fun refreshData() {
+        initData()
+    }
 
 }

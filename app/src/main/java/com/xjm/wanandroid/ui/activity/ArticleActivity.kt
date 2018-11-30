@@ -2,7 +2,6 @@ package com.xjm.wanandroid.ui.activity
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
