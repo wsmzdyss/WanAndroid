@@ -11,10 +11,12 @@ import com.bumptech.glide.Glide
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.adapter.ArticleAdapter
 import com.xjm.wanandroid.base.BaseMvpFragment
+import com.xjm.wanandroid.bean.response.Article
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.bean.response.BannerResp
 import com.xjm.wanandroid.presenter.HomePresenter
 import com.xjm.wanandroid.ui.activity.ArticleActivity
+import com.xjm.wanandroid.utils.Constant
 import com.xjm.wanandroid.view.HomeView
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
@@ -33,6 +35,7 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
     private var titleList = arrayListOf<String>()
     private var imageList = arrayListOf<String>()
     private var bannerList = arrayListOf<BannerResp>()
+    private var articleList = arrayListOf<Article>()
 
     private lateinit var banner: Banner
     private lateinit var parentView: View
@@ -56,7 +59,7 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
         }
 
         //RecyclerView
-        adapter = ArticleAdapter()
+        adapter = ArticleAdapter(articleList)
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
 

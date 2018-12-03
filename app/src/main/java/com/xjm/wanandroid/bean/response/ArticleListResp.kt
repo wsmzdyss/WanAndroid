@@ -1,5 +1,7 @@
 package com.xjm.wanandroid.bean.response
 
+import com.chad.library.adapter.base.entity.MultiItemEntity
+
 /**
  * Created by xjm on 2018/11/12.
  */
@@ -13,7 +15,7 @@ data class ArticleListResp(
     val total: Int
 )
 
-data class Article(
+data class Article (
     val apkLink: String,
     val author: String,
     val chapterId: Int,
@@ -37,7 +39,9 @@ data class Article(
     val userId: Int,
     val visible: Int,
     val zan: Int
-)
+): MultiItemEntity {
+    override fun getItemType(): Int = if (envelopePic.isNotBlank() && desc.isNotBlank()) 1 else 0
+}
 
 data class Tag(
     val name: String,

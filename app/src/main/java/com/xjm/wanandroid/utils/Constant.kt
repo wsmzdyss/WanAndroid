@@ -28,4 +28,7 @@ object Constant {
     const val SET_COOKIE_KEY = "set-cookie"
 
     const val CONTENT_CID_KEY = "cid"
+
+    const val MULTIPLEITEM_ARTICLE = 0
+    const val MULTIPLEITEM_PROJECT = 1
 }

@@ -7,6 +7,7 @@ import android.view.View
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.adapter.ArticleAdapter
 import com.xjm.wanandroid.base.BaseMvpFragment
+import com.xjm.wanandroid.bean.response.Article
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.presenter.WechatChildPresenter
 import com.xjm.wanandroid.ui.activity.ArticleActivity
@@ -20,6 +21,8 @@ import org.jetbrains.anko.support.v4.startActivity
  */
 class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChildView {
     override fun attachLayoutRes(): Int = R.layout.fragment_wechat_child_list
+
+    private var articleList = arrayListOf<Article>()
 
     companion object {
         fun getInstance(cid: Int) : WechatChildFragment {
@@ -46,7 +49,7 @@ class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChild
 
     private fun initView() {
         //RecyclerView
-        adapter = ArticleAdapter()
+        adapter = ArticleAdapter(articleList)
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
 

@@ -2,6 +2,7 @@ package com.xjm.wanandroid.ui.activity
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.text.Html
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -37,6 +38,14 @@ class ArticleActivity : BaseActivity(), BaseToolbarInterface {
     }
 
     override fun initToolbar(toolbar: Toolbar, center: TextView, right: TextView, back: ImageView) {
-        center.text = webTitle
+        center.text = Html.fromHtml(webTitle)
+    }
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

@@ -25,6 +25,8 @@ class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
 
     override fun attachLayoutRes(): Int = R.layout.fragment_know_child_list
 
+    private var articleList = arrayListOf<Article>()
+
     companion object {
         fun getInstance(cid: Int): KnowChildFragment {
             val fragment = KnowChildFragment()
@@ -50,7 +52,7 @@ class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
 
     private fun initView() {
         //RecyclerView
-        adapter = ArticleAdapter()
+        adapter = ArticleAdapter(articleList)
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
 
