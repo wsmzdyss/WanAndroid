@@ -27,6 +27,7 @@ abstract class BaseFragment : RxFragment() {
 
     protected val username : String by Preference(Constant.USERNAME, "")
 
+    //是否注册EventBus
     protected var isEventBusRegister : Boolean = false
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

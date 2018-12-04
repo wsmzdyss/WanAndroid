@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.adapter.ArticleAdapter
-import com.xjm.wanandroid.adapter.ProjectAdapter
 import com.xjm.wanandroid.base.BaseMvpFragment
 import com.xjm.wanandroid.bean.response.Article
 import com.xjm.wanandroid.bean.response.ArticleListResp

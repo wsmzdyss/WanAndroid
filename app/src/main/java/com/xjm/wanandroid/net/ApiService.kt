@@ -50,4 +50,7 @@ interface ApiService {
 
     @GET("/project/list/{page}/json")
     fun getProjectList(@Path("page") page: Int, @Query("cid") cid: Int) : Observable<BaseResponse<ArticleListResp>>
+
+    @GET("/navi/json")
+    fun getNaviTree() : Observable<BaseResponse<List<Guide>>>
 }

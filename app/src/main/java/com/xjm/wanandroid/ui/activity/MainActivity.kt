@@ -10,10 +10,7 @@ import com.xjm.wanandroid.R
 import com.xjm.wanandroid.base.BaseActivity
 import com.xjm.wanandroid.bean.event.LoginEvent
 import com.xjm.wanandroid.common.AppManager
-import com.xjm.wanandroid.ui.fragment.HomeFragment
-import com.xjm.wanandroid.ui.fragment.KnowFragment
-import com.xjm.wanandroid.ui.fragment.ProjectFragment
-import com.xjm.wanandroid.ui.fragment.WechatFragment
+import com.xjm.wanandroid.ui.fragment.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -31,7 +28,7 @@ class MainActivity : BaseActivity() {
 
     private var mKnowFragment: KnowFragment? = null
 
-    private var mGuideFragment: KnowFragment? = null
+    private var mGuideFragment: GuideFragment? = null
 
     private var mProjectFragment: ProjectFragment? = null
 
@@ -173,7 +170,7 @@ class MainActivity : BaseActivity() {
             2 // 导航
             -> {
                 if (mGuideFragment == null) {
-                    mGuideFragment = KnowFragment()
+                    mGuideFragment = GuideFragment()
                     transaction.add(R.id.container, mGuideFragment!!, "guide")
                 } else {
                     transaction.show(mGuideFragment!!)

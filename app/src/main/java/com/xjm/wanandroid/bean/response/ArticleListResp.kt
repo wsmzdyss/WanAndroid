@@ -15,7 +15,7 @@ data class ArticleListResp(
     val total: Int
 )
 
-data class Article (
+data class Article(
     val apkLink: String,
     val author: String,
     val chapterId: Int,
@@ -39,7 +39,7 @@ data class Article (
     val userId: Int,
     val visible: Int,
     val zan: Int
-): MultiItemEntity {
+) : MultiItemEntity {
     override fun getItemType(): Int = if (envelopePic.isNotBlank() && desc.isNotBlank()) 1 else 0
 }
 
@@ -47,3 +47,5 @@ data class Tag(
     val name: String,
     val url: String
 )
+
+data class Guide(val cid: Int, val name: String, val articles: List<Article>)
