@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.widget.TextView
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.xjm.wanandroid.R
+import com.xjm.wanandroid.TestActivity
 import com.xjm.wanandroid.base.BaseActivity
 import com.xjm.wanandroid.bean.event.LoginEvent
 import com.xjm.wanandroid.common.AppManager
@@ -75,6 +76,9 @@ class MainActivity : BaseActivity() {
                 R.id.nav_collect -> {
                     drawerLayout.closeDrawer(Gravity.START)
                     startActivity<CollectActivity>()
+                }
+                R.id.nav_about_us -> {
+                    //startActivity<TestActivity>()
                 }
             }
             return@setNavigationItemSelectedListener false
