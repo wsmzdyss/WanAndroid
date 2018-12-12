@@ -3,10 +3,13 @@ package com.xjm.wanandroid.ui.fragment
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.adapter.ArticleAdapter
 import com.xjm.wanandroid.base.BaseMvpFragment
+import com.xjm.wanandroid.base.BasePagerMvpFragment
 import com.xjm.wanandroid.bean.response.Article
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.presenter.WechatChildPresenter
@@ -19,7 +22,7 @@ import org.jetbrains.anko.support.v4.startActivity
 /**
  * Created by xjm on 2018/11/28.
  */
-class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChildView {
+class WechatChildFragment : BasePagerMvpFragment<WechatChildPresenter>(), WechatChildView {
     override fun attachLayoutRes(): Int = R.layout.fragment_wechat_child_list
 
     private var articleList = arrayListOf<Article>()
@@ -40,14 +43,12 @@ class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChild
 
     private var cid = 0
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         cid = arguments?.getInt(Constant.CONTENT_CID_KEY) ?: 0
-        initData()
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    private fun initView() {
+    override fun initView() {
         //RecyclerView
         adapter = ArticleAdapter(articleList)
         val layoutManager = LinearLayoutManager(context)
@@ -68,6 +69,10 @@ class WechatChildFragment : BaseMvpFragment<WechatChildPresenter>(), WechatChild
             }
         }
 
+    }
+
+    override fun lazyLoad() {
+        initData()
     }
 
     private fun initData() {

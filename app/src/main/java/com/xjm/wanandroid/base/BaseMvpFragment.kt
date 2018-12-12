@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.xjm.wanandroid.R
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import org.jetbrains.anko.support.v4.dip
 import org.jetbrains.anko.support.v4.toast
 
 /**
@@ -19,6 +19,7 @@ abstract class BaseMvpFragment<T : BasePresenter<*>> : BaseFragment(), BaseView 
         bindPresenterView()
         swipeRefreshLayout = mRootView.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout?.apply {
+            isRefreshing = true
             setColorSchemeColors(context!!.getColor(R.color.colorPrimary))
             setOnRefreshListener {
                 refreshData()
@@ -26,6 +27,13 @@ abstract class BaseMvpFragment<T : BasePresenter<*>> : BaseFragment(), BaseView 
         }
         return mRootView
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    protected open fun initView() {}
 
     var swipeRefreshLayout: SwipeRefreshLayout? = null
 

@@ -27,7 +27,6 @@ class KnowFragment : BaseMvpFragment<KnowPresenter>(), KnowView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initData()
     }
 
@@ -35,7 +34,7 @@ class KnowFragment : BaseMvpFragment<KnowPresenter>(), KnowView {
         mPresenter.getKnowTree()
     }
 
-    private fun initView() {
+    override fun initView() {
         //RecyclerView
         adapter = KnowAdapter()
         val layoutManager = LinearLayoutManager(context)

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.xjm.wanandroid.R
 import com.xjm.wanandroid.adapter.ArticleAdapter
 import com.xjm.wanandroid.base.BaseMvpFragment
+import com.xjm.wanandroid.base.BasePagerMvpFragment
 import com.xjm.wanandroid.bean.response.Article
 import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.presenter.KnowChildPresenter
@@ -21,7 +22,7 @@ import org.jetbrains.anko.support.v4.startActivity
 /**
  * Created by xjm on 2018/11/28.
  */
-class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
+class KnowChildFragment : BasePagerMvpFragment<KnowChildPresenter>(), KnowChildView {
 
     override fun attachLayoutRes(): Int = R.layout.fragment_know_child_list
 
@@ -43,14 +44,12 @@ class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
 
     private var cid = 0
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         cid = arguments?.getInt(Constant.CONTENT_CID_KEY) ?: 0
-        initData()
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    private fun initView() {
+    override fun initView() {
         //RecyclerView
         adapter = ArticleAdapter(articleList)
         val layoutManager = LinearLayoutManager(context)
@@ -76,6 +75,10 @@ class KnowChildFragment : BaseMvpFragment<KnowChildPresenter>(), KnowChildView {
     private fun initData() {
         page = 0
         mPresenter.getKnowList(page, cid)
+    }
+
+    override fun lazyLoad() {
+        initData()
     }
 
 

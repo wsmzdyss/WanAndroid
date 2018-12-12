@@ -44,7 +44,7 @@ class WechatFragment : BaseMvpFragment<WechatPresenter>(), WechatView {
         mPresenter.getWechatTree()
     }
 
-    private fun initView() {
+    override fun initView() {
         viewPager.apply {
             adapter = WechatPagerAdapter(childList, childFragmentManager)
             offscreenPageLimit = childList.size

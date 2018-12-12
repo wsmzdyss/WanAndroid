@@ -46,11 +46,10 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initData()
     }
 
-    private fun initView() {
+    override fun initView() {
         //Banner
         parentView = LayoutInflater.from(context).inflate(R.layout.item_home_banner, null)
         banner = parentView.findViewById(R.id.banner)

@@ -29,22 +29,22 @@ class ProjectFragment : BaseMvpFragment<ProjectPresenter>(), ProjectView {
         mPresenter.lifecycle = this
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initDate()
+    }
+
     override fun onProjectTreeResult(t: List<KnowChildren>) {
         childList.clear()
         childList.addAll(t)
-        initView()
+        showView()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
-
-    private fun initData() {
+    private fun initDate() {
         mPresenter.getProjectTree()
     }
 
-    private fun initView() {
+    private fun showView() {
         viewPager.apply {
             adapter = ProjectPagerAdapter(childList, childFragmentManager)
             offscreenPageLimit = childList.size

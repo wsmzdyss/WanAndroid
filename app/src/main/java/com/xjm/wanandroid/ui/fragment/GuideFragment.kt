@@ -54,10 +54,10 @@ class GuideFragment : BaseMvpFragment<GuidePresenter>(), GuideView {
 
     override fun onGuideResult(t: List<Guide>) {
         guideList.addAll(t)
-        initView()
+        showView()
     }
 
-    private fun initView() {
+    private fun showView() {
         vTabLayout.apply {
             setTabAdapter(NavigationTabAdapter(context, guideList))
             addOnTabSelectedListener(object : VerticalTabLayout.OnTabSelectedListener {
@@ -169,8 +169,7 @@ class GuideFragment : BaseMvpFragment<GuidePresenter>(), GuideView {
 
     override fun attachLayoutRes(): Int = R.layout.fragment_guide
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initView() {
         mPresenter.getNaviTree()
     }
 
