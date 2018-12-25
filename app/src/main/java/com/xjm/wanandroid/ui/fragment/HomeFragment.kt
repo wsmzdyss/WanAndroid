@@ -17,6 +17,7 @@ import com.xjm.wanandroid.bean.response.BannerResp
 import com.xjm.wanandroid.presenter.HomePresenter
 import com.xjm.wanandroid.ui.activity.ArticleActivity
 import com.xjm.wanandroid.utils.Constant
+import com.xjm.wanandroid.utils.Utils
 import com.xjm.wanandroid.view.HomeView
 import com.youth.banner.Banner
 import com.youth.banner.BannerConfig
@@ -114,21 +115,7 @@ class HomeFragment : BaseMvpFragment<HomePresenter>(), HomeView {
     }
 
     override fun onArticleListResult(t: ArticleListResp, isRefresh: Boolean) {
-        t.datas.let {
-            adapter.run {
-                if (isRefresh) {
-                    replaceData(it)
-                } else {
-                    addData(it)
-                }
-                val size = it.size
-                if (size < t.size) {
-                    loadMoreEnd(isRefresh)
-                } else {
-                    loadMoreComplete()
-                }
-            }
-        }
+        Utils.refreshAndLoadArticle(t, isRefresh, adapter)
     }
 
     inner class GlideImageLoader : ImageLoader() {

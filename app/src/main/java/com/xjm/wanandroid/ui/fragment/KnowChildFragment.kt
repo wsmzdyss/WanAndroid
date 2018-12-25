@@ -15,6 +15,7 @@ import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.presenter.KnowChildPresenter
 import com.xjm.wanandroid.ui.activity.ArticleActivity
 import com.xjm.wanandroid.utils.Constant
+import com.xjm.wanandroid.utils.Utils
 import com.xjm.wanandroid.view.KnowChildView
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.jetbrains.anko.support.v4.startActivity
@@ -89,21 +90,7 @@ class KnowChildFragment : BasePagerMvpFragment<KnowChildPresenter>(), KnowChildV
     }
 
     override fun onKnowListResult(t: ArticleListResp, isRefresh: Boolean) {
-        t.datas.let {
-            adapter.run {
-                if (isRefresh) {
-                    replaceData(it)
-                } else {
-                    addData(it)
-                }
-                val size = it.size
-                if (size < t.size) {
-                    loadMoreEnd(isRefresh)
-                } else {
-                    loadMoreComplete()
-                }
-            }
-        }
+        Utils.refreshAndLoadArticle(t, isRefresh, adapter)
     }
 
     override fun refreshData() {

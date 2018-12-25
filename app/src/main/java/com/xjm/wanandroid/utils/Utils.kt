@@ -1,7 +1,9 @@
 package com.xjm.wanandroid.utils
 
 import android.graphics.Color
+import com.xjm.wanandroid.adapter.ArticleAdapter
 import com.xjm.wanandroid.base.BaseResponse
+import com.xjm.wanandroid.bean.response.ArticleListResp
 import com.xjm.wanandroid.net.ApiService
 import com.xjm.wanandroid.net.RetrofitFactory
 import io.reactivex.Observer
@@ -102,6 +104,24 @@ object Utils {
 //        }
         //使用rgb混合生成一种新的颜色,Color.rgb生成的是一个int数
         return Color.rgb(red, green, blue)
+    }
+
+    fun refreshAndLoadArticle(t: ArticleListResp, isRefresh: Boolean, adapter: ArticleAdapter) {
+        t.datas.let {
+            adapter.run {
+                if (isRefresh) {
+                    replaceData(it)
+                } else {
+                    addData(it)
+                }
+                val size = it.size
+                if (size < t.size) {
+                    loadMoreEnd(isRefresh)
+                } else {
+                    loadMoreComplete()
+                }
+            }
+        }
     }
 
 }
