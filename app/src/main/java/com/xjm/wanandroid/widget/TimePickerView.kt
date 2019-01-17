@@ -19,6 +19,10 @@ class TimePickerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
+    private var timePickListener: OnTimePickedListener? = null
+
+    private var timeMode = 0
+
     private val mPaint by lazy { Paint() }
     private val mTextPaint by lazy { Paint() }
 
@@ -33,7 +37,7 @@ class TimePickerView @JvmOverloads constructor(
     private var mInsideRadius = 0f
     private var mOutsideRadius = 0f
 
-    var count = 12
+    private var count = 12
 
     private var mEachAngle = 0.0
 
@@ -65,13 +69,12 @@ class TimePickerView @JvmOverloads constructor(
 
         typedArray.recycle()
 
-        initView()
+        mPaint.isAntiAlias = true
+        mTextPaint.isAntiAlias = true
     }
 
     private fun initView() {
         mEachAngle = 360.0 / count
-        mPaint.isAntiAlias = true
-        mTextPaint.isAntiAlias = true
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -86,9 +89,11 @@ class TimePickerView @JvmOverloads constructor(
         mOutsideRadius = 4f / 5 * mBgRadius
 
         limitLength = (mInsideRadius + mOutsideRadius) / 2f
+        mPoint.x = mCenterX
     }
 
     override fun onDraw(canvas: Canvas) {
+        initView()
 
         drawBackCircle(canvas)
         drawCenterCircle(canvas)
@@ -139,7 +144,7 @@ class TimePickerView @JvmOverloads constructor(
         }
         var x: Float
         var y: Float
-        for (i in 0 until 2 * count step mStep) {
+        for (i in 0 until (if (timeMode == 0) 2 else 1) * count step mStep) {
             val point = getItemPointByAngle((i * mEachAngle), i >= count)
             x = point.x
             y = point.y
@@ -153,11 +158,11 @@ class TimePickerView @JvmOverloads constructor(
             val top = textFontMetrics.top
             val bottom = textFontMetrics.bottom
             val baseLineY = textRect.centerY() - top / 2 - bottom / 2
-            val text = (when (i) {
-                0 -> 12
-                12 -> 0
+            val text = if (timeMode == 0) (when (i) {
+                0 -> count
+                count -> 0
                 else -> i
-            }).toString()
+            }).toString() else i.toString()
 
             canvas.drawText(text, textRect.centerX(), baseLineY, mTextPaint)
         }
@@ -174,7 +179,7 @@ class TimePickerView @JvmOverloads constructor(
         val x = event.x
         val y = event.y
         val angle = getAngleByPoint(PointF(x, y))
-        isMoveInSide = Math.sqrt(Math.pow((x - mCenterX).toDouble(), 2.0) + Math.pow((y - mCenterY).toDouble(), 2.0)) < limitLength
+        isMoveInSide = if (timeMode == 0) Math.sqrt(Math.pow((x - mCenterX).toDouble(), 2.0) + Math.pow((y - mCenterY).toDouble(), 2.0)) < limitLength else false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
 
@@ -186,9 +191,18 @@ class TimePickerView @JvmOverloads constructor(
                 }
             }
             MotionEvent.ACTION_UP -> {
-                val curIndex: Int = (angle / mEachAngle).toInt() + if ((angle % mEachAngle) <= 15) 0 else 1
+                var curIndex: Int = (angle / mEachAngle).toInt() + if ((angle % mEachAngle) <= 15) 0 else 1
                 val point = getItemPointByAngle(curIndex * mEachAngle, isMoveInSide)
                 startAnimator(point)
+
+                if (curIndex == 0)
+                    curIndex = if (timeMode == 0) count else 0
+                if (isMoveInSide) {
+                    curIndex += count
+                    curIndex %= (2 * count)
+                }
+
+                timePickListener?.onTimePicked(curIndex)
             }
         }
         invalidate()
@@ -237,5 +251,30 @@ class TimePickerView @JvmOverloads constructor(
         }
     }
 
+    interface OnTimePickedListener {
+        fun onTimePicked(position: Int)
+    }
+
+    fun setTimePickedListener(listener: OnTimePickedListener) {
+        this.timePickListener = listener
+    }
+
+    fun setTimeMode(mode: Int) {
+        this.timeMode = mode
+        when (mode) {
+            0 -> {
+                count = 12
+                mStep = 1
+            }
+            1 -> {
+                count = 60
+                mStep = 5
+                mPoint.x = mCenterX
+                mPoint.y = 0f
+                isMoveInSide = false
+            }
+        }
+        invalidate()
+    }
 
 }

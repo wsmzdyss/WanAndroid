@@ -16,7 +16,7 @@ open class BaseActivity : RxAppCompatActivity() {
 
     protected var isLogin : Boolean by Preference(Constant.IS_LOGIN, false)
 
-    protected val username : String by Preference(Constant.USERNAME, "")
+    protected var username : String by Preference(Constant.USERNAME, "")
 
     protected var isEventBusRegister: Boolean = false
 

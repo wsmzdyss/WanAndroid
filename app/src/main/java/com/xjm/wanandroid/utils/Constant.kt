@@ -15,6 +15,7 @@ object Constant {
     const val IS_LOGIN = "is_login"
     const val USERNAME = "username"
     const val SAVE_USER_LOGIN_KEY = "user/login"
+    const val SAVE_USER_LOGOUT_KEY = "user/logout"
     const val SAVE_USER_REGISTER_KEY = "user/register"
 
     const val CACHE_SIZE: Long = 50 * 1024 * 1024

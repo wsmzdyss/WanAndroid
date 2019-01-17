@@ -20,6 +20,9 @@ interface ApiService {
     @POST("/user/login")
     fun login(@Field("username") username: String, @Field("password") password: String) : Observable<BaseResponse<LoginResp>>
 
+    @GET("/user/logout/json")
+    fun logout() : Observable<BaseResponse<Any>>
+
     @FormUrlEncoded
     @POST("/user/register")
     fun register(@Field("username") username: String, @Field("password") password: String, @Field("repassword") repassword: String) : Observable<BaseResponse<LoginResp>>

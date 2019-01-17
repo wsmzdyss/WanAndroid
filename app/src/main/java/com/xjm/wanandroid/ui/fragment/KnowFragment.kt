@@ -75,4 +75,8 @@ class KnowFragment : BaseMvpFragment<KnowPresenter>(), KnowView {
         mPresenter.lifecycle = this
     }
 
+    override fun refreshData() {
+        initData()
+    }
+
 }

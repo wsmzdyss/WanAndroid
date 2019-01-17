@@ -12,6 +12,7 @@ import com.xjm.wanandroid.base.BaseActivity
 import com.xjm.wanandroid.bean.event.LoginEvent
 import com.xjm.wanandroid.common.AppManager
 import com.xjm.wanandroid.ui.fragment.*
+import com.xjm.wanandroid.utils.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -54,19 +55,11 @@ class MainActivity : BaseActivity() {
 
     private fun initView() {
         tvUserName?.apply {
-            when (isLogin) {
-                true -> {
-                    text = username
-                    setOnClickListener {
-                        //TODO
-                    }
-                }
-                false -> {
-                    text = "登录"
-                    setOnClickListener {
-                        drawerLayout.closeDrawer(Gravity.START)
-                        startActivity<LoginActivity>()
-                    }
+            text = if (isLogin) username else "登录"
+            setOnClickListener {
+                if (!isLogin) {
+                    drawerLayout.closeDrawer(Gravity.START)
+                    startActivity<LoginActivity>()
                 }
             }
         }
@@ -79,6 +72,12 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.nav_about_us -> {
                     //startActivity<TestActivity>()
+                }
+                R.id.nav_logout -> {
+                    Utils.logOut()
+                    tvUserName.text = "登录"
+                    username = ""
+                    isLogin = false
                 }
             }
             return@setNavigationItemSelectedListener false

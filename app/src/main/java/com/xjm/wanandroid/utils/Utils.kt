@@ -39,10 +39,8 @@ object Utils {
     }
 
     fun encodeUsername(cookie: String): String {
-        return cookie
-            .split(";")
-            .filter { it.contains("UserName") }[0]
-            .split("=")[1]
+        val list = cookie.split(";").filter { it.contains("UserName") }
+        return if (list.isNotEmpty()) list[0].split("=")[1] else ""
     }
 
     fun addCollect(id: Int) {
@@ -122,6 +120,26 @@ object Utils {
                 }
             }
         }
+    }
+
+    fun logOut() {
+        RetrofitFactory.INSTANCE.create(ApiService::class.java)
+            .logout()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<BaseResponse<Any>> {
+                override fun onComplete() {
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                }
+
+                override fun onNext(t: BaseResponse<Any>) {
+                }
+
+                override fun onError(e: Throwable) {
+                }
+            })
     }
 
 }

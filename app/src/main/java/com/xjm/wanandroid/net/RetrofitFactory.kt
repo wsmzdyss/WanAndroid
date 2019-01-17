@@ -60,7 +60,7 @@ class RetrofitFactory private constructor() {
             val url = request.url().toString()
 
             if (response.headers(Constant.SET_COOKIE_KEY).isNotEmpty() && (url.contains(Constant.SAVE_USER_LOGIN_KEY)
-                        || url.contains(Constant.SAVE_USER_REGISTER_KEY))
+                        || url.contains(Constant.SAVE_USER_REGISTER_KEY) || url.contains(Constant.SAVE_USER_LOGOUT_KEY))
             ) {
                 val cookies = response.headers(Constant.SET_COOKIE_KEY)
                 val cookie = Utils.encodeCookie(cookies)
