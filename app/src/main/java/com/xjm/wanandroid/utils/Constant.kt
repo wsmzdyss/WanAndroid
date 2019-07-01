@@ -7,7 +7,7 @@ object Constant {
     /**
      * baseUrl
      */
-    const val REQUEST_BASE_URL = "http://www.wanandroid.com"
+    const val REQUEST_BASE_URL = "https://www.wanandroid.com"
     /**
      * Share preferences name
      */
